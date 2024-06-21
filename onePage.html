@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/CSS/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <form action="twoPage.html" id="form1">
+            <div class="form-group">
+                <label>
+                    <p class="text__title-book-name">Имя книги</p>
+                    <input class='input' id="book-name" type="text" class="form-control" name="name_book">
+                </label>
+                <label>
+                    <p class="text__title-description-book">Описание книги</p>
+                    <textarea name="description" id="description-book"></textarea>
+                </label>
+                <label for="rate-the-book">
+                    <p class="text__title-rate-the-book">Оценка</p>
+                </label>
+                <select id="rate" name="rate-the-book" id="">
+                    <option value=""></option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div class="box__file">
+                <input type="file" id="adminDealImg">
+            </div>
+            <input id="add__book" type="submit" value="Добавить книгу" onclick="getData()">
+        </form>
+
+        <script>
+
+
+            let bookIndex = 0;
+
+            function getData() {
+                // getting the values
+                let bookName = document.getElementById("book-name").value;
+                let descriptionBook = document.getElementById("description-book").value;
+                let rate = document.getElementById('rate').value;
+
+                // getting existing values from local storage or creating new arrays if they don't exist
+                let bookNames = JSON.parse(localStorage.getItem("book-names")) || [];
+                let descriptionBooks = JSON.parse(localStorage.getItem("description-books")) || [];
+                let rates = JSON.parse(localStorage.getItem("rates")) || [];
+                let images = JSON.parse(localStorage.getItem("images")) || [];
+
+                // adding new values to arrays
+                bookNames.push(bookName);
+                descriptionBooks.push(descriptionBook);
+                rates.push(rate);
+                if (localStorage.getItem('img-BASE64')) {
+                    images.push(localStorage.getItem('img-BASE64'));
+                    localStorage.removeItem('img-BASE64');
+                } else {
+                    images.push(null);
+                }
+
+                // saving arrays in local storage
+                localStorage.setItem("book-names", JSON.stringify(bookNames));
+                localStorage.setItem("description-books", JSON.stringify(descriptionBooks));
+                localStorage.setItem("rates", JSON.stringify(rates));
+                localStorage.setItem("images", JSON.stringify(images));
+
+
+                // incrementing book index
+                bookIndex++;
+            }
+            //Функция преобразует файл в в base64
+            function getBase64(file) {
+                return new Promise((resolve, reject) => {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        resolve(reader.result)
+                    };
+                    reader.onerror = reject
+                })
+            }
+
+            document.querySelector('#adminDealImg').addEventListener('change', async (e) => {
+                const data = await getBase64(e.target.files[0])
+                localStorage.setItem('img-BASE64', data)
+            })
+
+
+        </script>
+
+
+    </div>
+
+</body>
+
+</html>
