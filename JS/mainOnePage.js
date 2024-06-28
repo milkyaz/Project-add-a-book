@@ -1,10 +1,8 @@
-let bookIndex = 0;
-
 function getData() {
   // getting the values
-  let bookName = document.getElementById("book-name").value;
-  let descriptionBook = document.getElementById("description-book").value;
-  let rate = document.getElementById("rate").value;
+  let bookName = document.querySelector("#book-name").value;
+  let descriptionBook = document.querySelector("#description-book").value;
+  let rate = document.querySelector("#rate").value;
 
   // getting existing values from local storage or creating a new array if it doesn't exist
   let books = JSON.parse(localStorage.getItem("books")) || [];
@@ -26,9 +24,6 @@ function getData() {
 
   // saving the array of book objects in local storage
   localStorage.setItem("books", JSON.stringify(books));
-
-  // incrementing book index
-  bookIndex++;
 }
 
 //Функция преобразует файл в в base64
